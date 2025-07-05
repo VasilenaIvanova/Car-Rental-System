@@ -1,0 +1,4 @@
+Id,Make,Model,Year,Type,Status,Renter
+1,Fiat,Tipo Station Wagon,2020,Hatchback,Rented, Ivan Ivanov
+2,Skoda,Rapid,2022,Sedan,Rented,Petur Petrov
+3,Renault,Clia,2023,Sedan,Available,None
