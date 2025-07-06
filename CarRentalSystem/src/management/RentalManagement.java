@@ -1,7 +1,7 @@
 
 package management;
 
-import files.CarFileWriter;
+import fileOperations.CarFileWriter;
 import models.Car;
 import models.Customer;
 import models.Rental;

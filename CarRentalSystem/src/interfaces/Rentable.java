@@ -1,6 +1,5 @@
 package interfaces;
 
-import models.Car;
 import models.Customer;
 
 import java.time.LocalDate;
