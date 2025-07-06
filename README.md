@@ -9,7 +9,7 @@ interfaces: Съдържа ключови интерфейси (Identifiable, Pr
 models: Модели на основни домейни (Vehicle, Car, Customer, Rental)  
 services: Слой на бизнес логиката (CarRentalService)  
 management: Логика на потребителския интерфейс (RentalManagement)  
-fileOperations: Четене и запис на файлове (CarFileReader, CarFileWriter)  
+fileOperations: Четене на файлове и запис във файлове (CarFileReader, CarFileWriter)  
 
 Interfaces:  
 Identifiable: Предоставя метод за получаване на уникален идентификатор на обект.  
