@@ -1,6 +1,6 @@
 package services;
 
-
+import models.Car;
 import models.Customer;
 import models.Rental;
 
@@ -10,105 +10,111 @@ import java.util.Iterator;
 import java.util.List;
 
 public class CarRentalService {
-    private List<Rental> cars;
+    private List<Car> cars;
 
-    public CarRentalService(List<Rental> cars) {
-                this.cars = new ArrayList<>(cars);
+    public CarRentalService(){
+        this.cars = new ArrayList<>();
     }
 
-    public void add(Rental car){
+    public CarRentalService(List<Car> cars) {
+        this.cars = new ArrayList<>(cars);
+    }
+
+    public void add(Car car) {
         cars.add(car);
     }
 
-    public void remove(int id){
-        Iterator<Rental> iterator = cars.iterator();
+    public void remove(int id) {
+        Iterator<Car> iterator = cars.iterator();
         while (iterator.hasNext()) {
-            Rental car = iterator.next();
+            Car car = iterator.next();
             if (car.getId() == id) {
                 iterator.remove();
-                break;
+                System.out.println("Car removed");
+                return;
             }
         }
+        System.out.println("Car not found.");
     }
 
-    public Rental getCarById(int id){
-        for(Rental car: cars){
-            if(car.getId() == id){
+    public Car getCarById(int id) {
+        for (Car car : cars) {
+            if (car.getId() == id) {
                 return car;
             }
         }
         return null;
     }
 
-    public List<Rental> allCars(){
-       // return new ArrayList<>(cars);
+    public List<Car> allCars() {
+        // return new ArrayList<>(cars);
         return this.cars;
     }
 
-    public Rental searchById(int id){
-        for(Rental car: cars){
-            if(car.getId() == id){
+    public List<Rental> allRentals(){
+        List<Rental> allRentals = new ArrayList<>();
+        for(Car car: cars){
+            allRentals.addAll(car.getRentals());
+        }
+        return allRentals;
+    }
+
+    public Car searchById(int id) {
+        for (Car car : cars) {
+            if (car.getId() == id) {
                 return car;
             }
         }
         return null;
     }
 
-    public List<Rental> searchByModel(String model){
-        List<Rental> result = new ArrayList<>();
-        for(Rental car: cars){
-            if(car.getModel().equals(model)){
+    public List<Car> searchByModel(String model) {
+        List<Car> result = new ArrayList<>();
+        for (Car car : cars) {
+            if (car.getModel().equals(model)) {
                 result.add(car);
             }
         }
         return result;
     }
 
-    public List<Rental> searchByStatus(String status){
-        List<Rental> result = new ArrayList<>();
-        for(Rental car: cars){
-            if(car.getStatus().equals(status)){
+    public List<Car> searchByType(String type) {
+        List<Car> result = new ArrayList<>();
+        for (Car car : cars) {
+            if (car.getType().equals(type)) {
                 result.add(car);
             }
         }
         return result;
     }
 
-    public List<Rental> searchByPeriod(LocalDate startDate, LocalDate returnDate){
-        List<Rental> result = new ArrayList<>();
-        for(Rental car: cars){
-            if(car.getStatus().equals("Rented")){
-                if(car.getReturnDate().isBefore(startDate) || returnDate.isBefore(car.getStartDate())){
-                    result.add(car);
-                }
-            }else{
-                result.add(car);
-            }
+    public void rent(Car car, Customer customer, LocalDate startDate, LocalDate returnDate) {
+        if(car == null){
+            System.out.println("Car not found.");
+            return;
         }
-        return result;
-    }
-
-    public void rent(int id, Customer customer, LocalDate startDate, LocalDate returnDate){
-        Rental car = getCarById(id);
-        if(car != null && car.getStatus().equals("Available")){
-            car.rent(customer, startDate, returnDate);
+        boolean rented = car.rent(customer, startDate, returnDate);
+        if(rented){
             System.out.println("Car rented successfully.");
-        }else if(car != null && car.getStatus().equals("Rented") && car.getReturnDate().isBefore(startDate)){
-            car.rent(customer, startDate, returnDate);
-            System.out.println("Car rented successfully.");
-        }else if(car == null || car.getStatus().equals("Rented") && car.getReturnDate().isAfter(startDate)){
-            System.out.printf("Car is not available or not found.");
         }
     }
 
-    public void returnCar(int id){
-        Rental car = getCarById(id);
-        if(car != null && car.getStatus().equals("Rented")){
-            car.returnCar();
-            System.out.println("Car returned successfully.");
-        }else{
+    public void returnCar(Car car, Customer customer, LocalDate returnDate) {
+        if (car == null){
             System.out.printf("Car is not rented or not found.");
+            return;
         }
+
+        boolean returned = car.returnCar(customer, returnDate);
+        if(returned){
+            System.out.println("Car returned successfully.");
+        }
+    }
+
+    public Rental getActiveRentalByCarId(int carId) {
+        Car car = getCarById(carId);
+        if (car == null) return null;
+        return car.getActiveRental();
     }
 
 }
