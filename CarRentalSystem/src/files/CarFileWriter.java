@@ -4,6 +4,7 @@ import models.Car;
 import models.Rental;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -24,11 +25,17 @@ public class CarFileWriter {
         return null;
     }
 
+    public boolean isFileEmpty() {
+        File file = new File(filename);
+        return !file.exists() || file.length() == 0;
+    }
+
     public void writeCars(List<Car> cars) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Id,Make,Model,Year,Type,Status,Renter,From,To");
-            writer.newLine();
-
+            if (isFileEmpty()) {
+                writer.write("Id,Make,Model,Year,Type,Status,Renter,From,To");
+                writer.newLine();
+            }
 
             for (Car car : cars) {
                 StringBuilder line = new StringBuilder();

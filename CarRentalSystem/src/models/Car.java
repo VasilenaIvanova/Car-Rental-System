@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Car implements Rentable{
-    protected static int idCounter = 1;
-    protected int id;
-    protected String make;
-    protected String model;
-    protected int year;
-    protected String type;
+    private static int idCounter = 1;
+    private int id;
+    private String make;
+    private String model;
+    private int year;
+    private String type;
     private List<Rental> rentals;
 
     public Car(String make, String model, int year, String type) {
@@ -70,12 +70,8 @@ public class Car implements Rentable{
 
     public void information() {
         System.out.print("Car -> ID: " + id + ", Make: " + make + ", Model: " + model + ", Year: " + year + ", Type: " + type);
-        if(rentals.isEmpty()){
-            System.out.println(", Status: Available");
-        }else{
             boolean rented = rentals.stream().anyMatch(Rental::isActive);
             System.out.println(", Status: "+(rented?"Rented":"Available"));
-        }
     }
 
     @Override
@@ -88,25 +84,23 @@ public class Car implements Rentable{
         }
         Rental newRental = new Rental(this, customer, startDate, returnDate);
         rentals.add(newRental);
-        System.out.println("Car " + this.getMake() +" "+ this.getModel() + " rented to " + customer.getName() + " from " + startDate + " to " + returnDate);
         return true;
     }
 
     @Override
-    public boolean returnCar(Customer customer, LocalDate returnDate){
+    public boolean returnCar(Customer customer, LocalDate returnDate) {
+        for (Rental rental : rentals) {
+            if (rental.isActive() && rental.getCustomer() != null &&
+                    rental.getCustomer().getName().equalsIgnoreCase(customer.getName())) {
 
-        for(Rental rental: rentals){
-            if(rental.getCustomer()!= null && rental.getCustomer().equals(customer)){
-                rental.setCustomer(null);
-                rental.setStartDate(null);
-                rental.setReturnDate(null);
-                System.out.println("Car " + this.getMake() + " " + this.getModel() + " returned by " + customer.getName());
+                rental.setActive(false); // деактивира рентала
+                System.out.println("Rental ended for customer: " + customer.getName());
                 return true;
             }
         }
-        System.out.println("This car is not rented.");
         return false;
     }
+
 
     public Rental getActiveRental() {
         for (Rental rental : rentals) {

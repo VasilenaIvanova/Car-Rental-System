@@ -17,16 +17,26 @@ public class App {
         CarFileReader reader = new CarFileReader("D:\\Sirma Academy\\Exam\\CarRentalSystem\\src\\cars.csv");
         CarFileWriter writer = new CarFileWriter("D:\\Sirma Academy\\Exam\\CarRentalSystem\\src\\cars.csv");
 
-        CarRentalService service = new CarRentalService(reader.readCars());
-        RentalManagement manager = new RentalManagement(service, writer);
-
-        boolean running = true;
-        while (running) {
-            System.out.print("\n> Enter command: ");
-            String command = scanner.nextLine();
-            running = manager.execute(command);
+        List<Car> cars = null;
+        try {
+            cars = reader.readCars();
+        } catch (Exception e) {
+            System.out.println("Error while reading cars");
+            return;
         }
 
+        CarRentalService service = new CarRentalService(cars);
+        RentalManagement manager = new RentalManagement(service, writer);
+
+        boolean isRunning = true;
+        while (isRunning) {
+            System.out.print("\n> Enter command: ");
+            String command = scanner.nextLine();
+            isRunning = manager.execute(command);
+        }
+
+        System.out.println("Goodbye!");
         scanner.close();
     }
+
 }

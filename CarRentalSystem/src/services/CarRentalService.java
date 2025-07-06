@@ -30,11 +30,9 @@ public class CarRentalService {
             Car car = iterator.next();
             if (car.getId() == id) {
                 iterator.remove();
-                System.out.println("Car removed");
                 return;
             }
         }
-        System.out.println("Car not found.");
     }
 
     public Car getCarById(int id) {
@@ -47,7 +45,6 @@ public class CarRentalService {
     }
 
     public List<Car> allCars() {
-        // return new ArrayList<>(cars);
         return this.cars;
     }
 
@@ -90,30 +87,23 @@ public class CarRentalService {
 
     public void rent(Car car, Customer customer, LocalDate startDate, LocalDate returnDate) {
         if(car == null){
-            System.out.println("Car not found.");
             return;
         }
-        boolean rented = car.rent(customer, startDate, returnDate);
-        if(rented){
-            System.out.println("Car rented successfully.");
-        }
+        car.rent(customer, startDate, returnDate);
     }
 
     public void returnCar(Car car, Customer customer, LocalDate returnDate) {
         if (car == null){
-            System.out.printf("Car is not rented or not found.");
             return;
         }
-
-        boolean returned = car.returnCar(customer, returnDate);
-        if(returned){
-            System.out.println("Car returned successfully.");
-        }
+        car.returnCar(customer, returnDate);
     }
 
     public Rental getActiveRentalByCarId(int carId) {
         Car car = getCarById(carId);
-        if (car == null) return null;
+        if (car == null) {
+            return null;
+        }
         return car.getActiveRental();
     }
 

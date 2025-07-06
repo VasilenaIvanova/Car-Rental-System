@@ -41,9 +41,11 @@ public class RentalManagement {
             case "return":
                 handleReturn();
                 break;
+            case "search":
+                handleSearch();
+                break;
             case "exit":
                 writer.writeCars(service.allCars());
-                System.out.println("Data saved!");
                 return false;
             default:
                 System.out.println("Try again.");
@@ -98,28 +100,31 @@ public class RentalManagement {
                 System.out.println("Enter a new Make: ");
                 String newMake = scanner.nextLine();
                 car.setMake(newMake);
+                System.out.println("Car edited successfully.");
                 break;
             case "Model":
                 System.out.println("Enter a new Model: ");
                 String newModel = scanner.nextLine();
                 car.setModel(newModel);
+                System.out.println("Car edited successfully.");
                 break;
             case "Year":
                 System.out.println("Enter a new Year: ");
                 int newYear = Integer.parseInt(scanner.nextLine());
                 car.setYear(newYear);
+                System.out.println("Car edited successfully.");
                 break;
             case "Type":
                 System.out.println("Enter a new Type: ");
                 String newType = scanner.nextLine();
                 car.setType(newType);
+                System.out.println("Car edited successfully.");
                 break;
             default:
                 System.out.println("Invalid option!");
         }
 
         writer.writeCars(service.allCars());
-        System.out.println("Car edited successfully.");
     }
 
     private void handleList() {
@@ -143,20 +148,23 @@ public class RentalManagement {
         String name = scanner.nextLine();
         System.out.println("Enter a Renter PhoneNumber: ");
         String phoneNumber = scanner.nextLine();
+        if(phoneNumber.length() != 10){
+            System.out.println("Invalid phoneNumber!");
+            return;
+        }
         System.out.println("Enter a Renter Email: ");
         String email = scanner.nextLine();
 
-        System.out.println("Enter period");
+        System.out.println("Enter period (yyyy-mm-dd)");
         System.out.println("From: ");
         LocalDate startDate = LocalDate.parse(scanner.nextLine());
         System.out.println("To: ");
         LocalDate returnDate = LocalDate.parse(scanner.nextLine());
 
         Customer customer = new Customer(name, phoneNumber, email);
-        boolean rented = car.rent(customer, startDate, returnDate);
 
-        if (rented) {
-            System.out.println("Car rented successfully.");
+        if (car.rent(customer, startDate, returnDate)) {
+            System.out.println("Car " + car.getMake() +" "+ car.getModel() + " rented to " + customer.getName() + " from " + startDate + " to " + returnDate);
         } else {
             System.out.println("Car could not be rented for the given period.");
         }
@@ -173,33 +181,57 @@ public class RentalManagement {
             return;
         }
 
+        Rental activeRental = car.getActiveRental();
+        if (activeRental == null) {
+            System.out.println("This car is not currently rented.");
+            return;
+        }
+
         System.out.print("Enter renter name: ");
         String name = scanner.nextLine();
 
-        System.out.print("Enter rental return date (yyyy-MM-dd): ");
+        if (!activeRental.getCustomer().getName().equals(name)) {
+            System.out.println("Customer name does not match the active rental.");
+            return;
+        }
+
+        System.out.print("Enter return date (yyyy-mm-dd): ");
         LocalDate returnDate = LocalDate.parse(scanner.nextLine());
 
-        Customer dummyCustomer = new Customer(name, "", ""); // сравнение по име
-        boolean returned = car.returnCar(dummyCustomer, returnDate);
+        activeRental.setActive(false);
+        System.out.println("Car " + car.getMake() + " " + car.getModel() + " returned successfully by " + name + ".");
 
-        if (returned) {
-            System.out.println("Car returned successfully.");
-        } else {
-            System.out.println("No matching active rental found.");
-        }
         writer.writeCars(service.allCars());
     }
 
-    /*
-    private void handleSearch() {
-        System.out.println("Search by model: ");
-        String model = scanner.nextLine();
 
-        List<Rental> result = service.searchByStatus(status);
-        for (Rental car : result) {
-            car.information();
+
+    private void handleSearch() {
+        System.out.println("Search by Model/Type: ");
+        String search = scanner.nextLine();
+
+        if(search.equals("Model"))
+        {
+            System.out.println("Search by Model: ");
+            String model = scanner.nextLine();
+
+            List<Car> result = service.searchByModel(model);
+            for (Car car : result) {
+                car.information();
+            }
+        }else if(search.equals("Type"))
+        {
+            System.out.println("Search by Type: ");
+            String type = scanner.nextLine();
+
+            List<Car> result = service.searchByType(type);
+            for (Car car : result) {
+                car.information();
+            }
+        }else{
+            System.out.println("Invalid search!");
         }
     }
 
-     */
+
 }

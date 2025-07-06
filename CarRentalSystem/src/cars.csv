@@ -1,2 +1,6 @@
 Id,Make,Model,Year,Type,Status,Renter,From,To
-1,toyota,corolla,2027,kdcn,Rented,ivn,2025-07-10,2025-07-15
+1,Fiat,Tipo Station Wagon,2020,Hatchback,Available
+2,Skoda,Rapid,2022,Sedan,Available
+3,Renault,Clia,2023,Sedan,Available
+4,Tesla,XS,2023,Sports car,Available
+6,Audi,MG,2018,Sports car,Available

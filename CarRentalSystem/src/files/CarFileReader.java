@@ -19,9 +19,9 @@ public class CarFileReader {
         List<Car> cars = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
+            String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(";");
+                String[] parts = line.split(",");
                 if (parts.length >= 5) {
                     String make = parts[1];
                     String model = parts[2];
