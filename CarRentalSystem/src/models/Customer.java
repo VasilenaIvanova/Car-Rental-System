@@ -2,7 +2,7 @@ package models;
 
 public class Customer {
     private static int idCounter = 1;
-    int id;
+    private int id;
     private String name;
     private String phoneNumber;
     private String email;

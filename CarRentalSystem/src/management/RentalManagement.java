@@ -69,7 +69,7 @@ public class RentalManagement {
         Car car = new Car(make, model, year, type);
         service.add(car);
         writer.writeCars(service.allCars());
-        System.out.printf("Car added.");
+        System.out.println("Car added.");
     }
 
     private void handleRemove() {
