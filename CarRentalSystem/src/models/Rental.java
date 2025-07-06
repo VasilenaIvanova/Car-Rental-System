@@ -21,7 +21,7 @@ public class Rental<T extends Vehicle> {
         return vehicle;
     }
 
-    public void setCar(T vehicle) {
+    public void setVehicle(T vehicle) {
         this.vehicle = vehicle;
     }
 
@@ -58,7 +58,6 @@ public class Rental<T extends Vehicle> {
     }
 
     public void information() {
-        System.out.println("Vehicle ID: " + vehicle.getId() + " is rented to: " + customer);
-        System.out.println("From: " + startDate + ", To: " + returnDate);
+        System.out.println("Vehicle ID: " + vehicle.getId() + " is rented to: " + customer + ", From: " + startDate + ", To: " + returnDate);
     }
 }

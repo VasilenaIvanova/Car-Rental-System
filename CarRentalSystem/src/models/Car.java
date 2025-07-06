@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Car extends Vehicle implements Rentable{
+public class Car extends Vehicle implements Rentable {
     private List<Rental<Car>> rentals;
 
     public Car(String make, String model, int year, String type) {
@@ -22,11 +22,20 @@ public class Car extends Vehicle implements Rentable{
         this.rentals = rentals;
     }
 
+    public Rental<Car> getActiveRental() {
+        for (Rental<Car> rental : rentals) {
+            if (rental.isActive()) {
+                return rental;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void information() {
         System.out.print("Car -> ID: " + id + ", Make: " + make + ", Model: " + model + ", Year: " + year + ", Type: " + type);
-            boolean rented = rentals.stream().anyMatch(Rental::isActive);
-            System.out.println(", Status: "+(rented?"Rented":"Available"));
+        boolean rented = rentals.stream().anyMatch(Rental::isActive);
+        System.out.println(", Status: " + (rented ? "Rented" : "Available"));
     }
 
     @Override
@@ -47,24 +56,11 @@ public class Car extends Vehicle implements Rentable{
         for (Rental<Car> rental : rentals) {
             if (rental.isActive() && rental.getCustomer() != null &&
                     rental.getCustomer().getName().equalsIgnoreCase(customer.getName())) {
-
-                rental.setActive(false); // деактивира рентала
+                rental.setActive(false);
                 System.out.println("Rental ended for customer: " + customer.getName());
                 return true;
             }
         }
         return false;
     }
-
-
-    public Rental<Car> getActiveRental() {
-        for (Rental<Car> rental : rentals) {
-            if (rental.isActive()) {
-                return rental;
-            }
-        }
-        return null;
-    }
-
 }
-

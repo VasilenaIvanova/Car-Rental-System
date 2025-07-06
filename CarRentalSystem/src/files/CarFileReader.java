@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarFileReader {
-    private String filename;
+    private final String filename;
 
     public CarFileReader(String filename) {
         this.filename = filename;

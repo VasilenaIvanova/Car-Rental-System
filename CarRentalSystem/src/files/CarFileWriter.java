@@ -10,14 +10,14 @@ import java.io.IOException;
 import java.util.List;
 
 public class CarFileWriter {
-    private String filename;
+    private final String filename;
 
     public CarFileWriter(String filename) {
         this.filename = filename;
     }
 
-    private Rental getActiveRental(Car car) {
-        for (Rental rental : car.getRentals()) { // предполага се, че имаш List<Rental> в Car
+    private Rental<Car> getActiveRental(Car car) {
+        for (Rental<Car> rental : car.getRentals()) { // предполага се, че имаш List<Rental> в Car
             if (rental.isActive()) {
                 return rental;
             }
@@ -45,7 +45,7 @@ public class CarFileWriter {
                         .append(car.getYear()).append(",")
                         .append(car.getType());
 
-                Rental activeRental = getActiveRental(car);
+                Rental<Car> activeRental = car.getActiveRental();
 
                 if (activeRental != null) {
                     line.append(",Rented")

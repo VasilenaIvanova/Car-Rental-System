@@ -10,9 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class CarRentalService {
-    private List<Car> cars;
+    private final List<Car> cars;
 
-    public CarRentalService(){
+    public CarRentalService() {
         this.cars = new ArrayList<>();
     }
 
@@ -29,10 +29,17 @@ public class CarRentalService {
         while (iterator.hasNext()) {
             Car car = iterator.next();
             if (car.getId() == id) {
+                boolean isRented = car.getRentals().stream().anyMatch(Rental::isActive);
+                if (isRented) {
+                    System.out.println("Cannot remove car with ID " + id + " because it is currently rented.");
+                    return;
+                }
                 iterator.remove();
+                System.out.println("Car with ID " + id + " has been removed.");
                 return;
             }
         }
+        System.out.println("Car with ID " + id + " not found.");
     }
 
     public Car getCarById(int id) {
@@ -48,9 +55,9 @@ public class CarRentalService {
         return this.cars;
     }
 
-    public List<Rental> allRentals(){
-        List<Rental> allRentals = new ArrayList<>();
-        for(Car car: cars){
+    public List<Rental<Car>> allRentals() {
+        List<Rental<Car>> allRentals = new ArrayList<>();
+        for (Car car : cars) {
             allRentals.addAll(car.getRentals());
         }
         return allRentals;
@@ -86,20 +93,20 @@ public class CarRentalService {
     }
 
     public void rent(Car car, Customer customer, LocalDate startDate, LocalDate returnDate) {
-        if(car == null){
+        if (car == null) {
             return;
         }
         car.rent(customer, startDate, returnDate);
     }
 
     public void returnCar(Car car, Customer customer, LocalDate returnDate) {
-        if (car == null){
+        if (car == null) {
             return;
         }
         car.returnCar(customer, returnDate);
     }
 
-    public Rental getActiveRentalByCarId(int carId) {
+    public Rental<Car> getActiveRentalByCarId(int carId) {
         Car car = getCarById(carId);
         if (car == null) {
             return null;
