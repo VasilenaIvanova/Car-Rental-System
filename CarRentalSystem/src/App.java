@@ -39,9 +39,8 @@ public class App {
         System.out.println("Welcome to the Car Rental System!");
         System.out.println("Available commands: add, list, edit, remove, rent, return, search, exit");
 
-        // Initialize components
-        CarFileReader reader = new CarFileReader("D:\\Sirma Academy\\CarRentalSystem\\src\\cars.csv");
-        CarFileWriter writer = new CarFileWriter("D:\\Sirma Academy\\CarRentalSystem\\src\\cars.csv");
+        CarFileReader reader = new CarFileReader("D:\\Sirma Academy\\Exam\\CarRentalSystem\\src\\cars.csv");
+        CarFileWriter writer = new CarFileWriter("D:\\Sirma Academy\\Exam\\CarRentalSystem\\src\\cars.csv");
 
         CarRentalService service = new CarRentalService(reader.readCars());
         RentalManagement manager = new RentalManagement(service, writer);

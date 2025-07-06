@@ -4,75 +4,56 @@ import interfaces.Rentable;
 
 import java.time.LocalDate;
 
-public class Car extends Vehicle implements Rentable {
-    private String renter;
-    private LocalDate startDate;
-    private LocalDate returnDate;
+public abstract class Car {
+    protected int id;
+    protected String make;
+    protected String model;
+    protected int year;
+    protected String type;
 
     public Car(int id, String make, String model, int year, String type) {
-        super(id, make, model, year, type);
-        this.renter = "";
-        this.startDate = null;
-        this.returnDate = null;
+        this.id = id;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.type = type;
     }
 
-    public String getRenter() {
-        return this.renter;
+    public int getId() {
+        return id;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public LocalDate getReturnDate() {
-        return returnDate;
+    public String getMake() {
+        return make;
     }
 
-    public void setRenter(String renter) {
-        this.renter = renter;
+    public void setMake(String make) {
+        this.make = make;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public String getModel() {
+        return model;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
+    public void setModel(String model) {
+        this.model = model;
     }
 
-    @Override
-    public void information() {
-        System.out.print("Car -> ID: "+id+", Make: "+make+", Model: "+model+", Year: "+year+", Type: "+type+", Status: "+status);
-        if(status.equals("Rented")){
-            System.out.println(", Renter: "+renter+", From: "+startDate+", To: "+returnDate);
-        }else{
-            System.out.println();
-        }
+    public int getYear() {
+        return year;
     }
 
-    @Override
-    public void rent(String renterName, LocalDate startDate, LocalDate returnDate) {
-        if(this.status.equals("Available")){
-            this.status = "Rented";
-            this.renter = renterName;
-            this.startDate = startDate;
-            this.returnDate = returnDate;
-            System.out.println("Car -> ID: "+id+" rented to "+renterName+" for period: "+startDate+","+returnDate);
-        }else{
-            System.out.println("Car -> ID: "+id+" is not available for rent.");
-        }
+    public void setYear(int year) {
+        this.year = year;
     }
 
-    @Override
-    public void returnCar() {
-        if(this.status.equals("Rented")){
-            this.status = "Available";
-            this.renter = "";
-            this.startDate = null;
-            this.returnDate = null;
-            System.out.println("Car -> ID: "+id+" has been returned.");
-        }else{
-            System.out.println("Car -> ID: "+id+" is not rented.");
-        }
+    public String getType() {
+        return type;
     }
+
+    public abstract void information();
 }

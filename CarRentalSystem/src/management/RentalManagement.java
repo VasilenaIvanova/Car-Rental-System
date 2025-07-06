@@ -1,7 +1,8 @@
 package management;
 
 import files.CarFileWriter;
-import models.Car;
+import models.Customer;
+import models.Rental;
 import services.CarRentalService;
 
 import java.time.LocalDate;
@@ -68,7 +69,7 @@ public class RentalManagement {
         System.out.println("Enter Type: ");
         String type = scanner.nextLine();
 
-        Car car = new Car(id, make, model, year, type);
+        Rental car = new Rental(id, make, model, year, type, "Available", null, null, null);
         service.add(car);
         writer.writeCars(service.allCars());
         System.out.printf("Car added.");
@@ -85,7 +86,7 @@ public class RentalManagement {
     private void handleEdit(){
         System.out.println("Enter car ID to edit: ");
         int id = Integer.parseInt(scanner.nextLine());
-        Car car = service.getCarById(id);
+        Rental car = service.getCarById(id);
         if(car == null){
             System.out.println("Car not found.");
             return;
@@ -94,15 +95,19 @@ public class RentalManagement {
         System.out.println("New Status(Available/Rented): ");
         car.setStatus(scanner.nextLine());
         if(car.getStatus().equals("Available") && !oldStatus.equals("Available")) {
-            car.setRenter("");
+            car.setCustomer(null);
             car.setStartDate(null);
             car.setReturnDate(null);
             writer.writeCars(service.allCars());
             System.out.println("Car updated.");
         }else if(car.getStatus().equals("Rented") && !oldStatus.equals("Rented")){
             System.out.println("Enter a Renter Name: ");
-            String renter = scanner.nextLine();
-            car.setRenter(renter);
+            String name = scanner.nextLine();
+            System.out.println("Enter a Renter PhoneNumber: ");
+            String phone = scanner.nextLine();
+            System.out.println("Enter a Renter Email: ");
+            String email = scanner.nextLine();
+            car.setCustomer(new Customer(name, phone, email));
             System.out.println("Enter a start date: ");
             LocalDate startDate = LocalDate.parse(scanner.nextLine());
             car.setStartDate(startDate);
@@ -117,8 +122,8 @@ public class RentalManagement {
     }
 
     private void handleList(){
-        List<Car> cars = service.allCars();
-        for(Car car: cars){
+        List<Rental> cars = service.allCars();
+        for(Rental car: cars){
             car.information();
         }
     }
@@ -127,8 +132,12 @@ public class RentalManagement {
         System.out.println("Enter car ID to rent: ");
         int id = Integer.parseInt(scanner.nextLine());
 
-        System.out.println("Enter Renter Name: ");
-        String renter = scanner.nextLine();
+        System.out.println("Enter a Renter Name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter a Renter PhoneNumber: ");
+        String phoneNumber = scanner.nextLine();
+        System.out.println("Enter a Renter Email: ");
+        String email = scanner.nextLine();
 
         System.out.println("Enter period");
         System.out.println("From: ");
@@ -136,7 +145,7 @@ public class RentalManagement {
         System.out.println("To: ");
         LocalDate returnDate = LocalDate.parse(scanner.nextLine());
 
-        service.rent(id,renter, startDate, returnDate);
+        service.rent(id,new Customer(name,phoneNumber,email), startDate, returnDate);
         writer.writeCars(service.allCars());
     }
 
@@ -155,15 +164,15 @@ public class RentalManagement {
         if(type.equals("model")){
             System.out.println("Enter model: ");
             String model = scanner.nextLine();
-            List<Car> result = service.searchByModel(model);
-            for(Car car: result){
+            List<Rental> result = service.searchByModel(model);
+            for(Rental car: result){
                 car.information();
             }
         }else if(type.equals("status")){
             System.out.println("Enter status: ");
             String status = scanner.nextLine();
-            List<Car> result = service.searchByStatus(status);
-            for(Car car: result){
+            List<Rental> result = service.searchByStatus(status);
+            for(Rental car: result){
                 car.information();
             }
         }else{

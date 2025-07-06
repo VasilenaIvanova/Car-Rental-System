@@ -1,9 +1,9 @@
 package files;
 
-import models.Car;
+import models.Customer;
+import models.Rental;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -17,8 +17,8 @@ public class CarFileReader {
         this.filename = filename;
     }
 
-    public List<Car> readCars() {
-        List<Car> cars = new ArrayList<>();
+    public List<Rental> readCars() {
+        List<Rental> cars = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line = reader.readLine();
@@ -44,22 +44,22 @@ public class CarFileReader {
                 int year = Integer.parseInt(parts[3].trim());
                 String type = parts[4].trim();
                 String status = parts[5].trim();
-                String renter = parts[6].trim();
-                LocalDate startDate = null;
-                LocalDate returnDate = null;
 
-                if (parts.length > 7 && !parts[7].trim().isEmpty() && !parts[7].trim().equalsIgnoreCase("null")) {
-                    startDate = LocalDate.parse(parts[7].trim());
-                }
-                if (parts.length > 8 && !parts[8].trim().isEmpty() && !parts[8].trim().equalsIgnoreCase("null")) {
-                    returnDate = LocalDate.parse(parts[8].trim());
-                }
-                Car car = new Car(id, make, model, year, type);
+                String renter = (parts.length > 6) ? parts[6].trim() : "";
+                String fromStr = (parts.length > 7) ? parts[7].trim() : "";
+                String toStr = (parts.length > 8) ? parts[8].trim() : "";
+
+                LocalDate from = (!fromStr.isEmpty() && !fromStr.equals("null")) ? LocalDate.parse(fromStr) : null;
+                LocalDate to = (!toStr.isEmpty() && !toStr.equals("null")) ? LocalDate.parse(toStr) : null;
+
+                Customer customer = (!renter.isEmpty()) ? new Customer(renter, fromStr, toStr) : null;
+                Rental car = new Rental(id, make, model, year, type, status, customer, from, to);
                 car.setStatus(status);
-                car.setRenter(renter);
-                car.setStartDate(startDate);
-                car.setReturnDate(returnDate);
+                car.setCustomer(customer);
+                car.setStartDate(from);
+                car.setReturnDate(to);
                 cars.add(car);
+
             }
         } catch (IOException e) {
             System.out.println("Error while reading the file.");

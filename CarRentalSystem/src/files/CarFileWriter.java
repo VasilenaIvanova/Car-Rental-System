@@ -1,6 +1,6 @@
 package files;
 
-import models.Car;
+import models.Rental;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -10,26 +10,33 @@ import java.util.List;
 public class CarFileWriter {
     private String filename;
 
-    public CarFileWriter(String filename){
+    public CarFileWriter(String filename) {
         this.filename = filename;
     }
 
-    public void writeCars(List<Car> cars){
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+    public void writeCars(List<Rental> cars) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("Id,Make,Model,Year,Type,Status,Renter,From,To");
             writer.newLine();
 
-            for(Car car: cars){
-                String line = car.getId()+","+
-                        car.getMake()+","+
-                        car.getModel()+","+
-                        car.getYear()+","+
-                        car.getType()+","+
-                        car.getStatus()+","+
-                        car.getRenter()+","+
-                        car.getStartDate()+","+
-                        car.getReturnDate();
-                writer.write(line);
+
+            for (Rental car : cars) {
+                StringBuilder line = new StringBuilder();
+                line.append(car.getId()).append(",")
+                        .append(car.getMake()).append(",")
+                        .append(car.getModel()).append(",")
+                        .append(car.getYear()).append(",")
+                        .append(car.getType()).append(",")
+                        .append(car.getStatus());
+
+                if ("Rented".equalsIgnoreCase(car.getStatus()) && car.getCustomer() != null) {
+                    line.append(",")
+                            .append(car.getCustomer().getName()).append(",")
+                            .append(car.getStartDate()).append(",")
+                            .append(car.getReturnDate());
+                }
+
+                writer.write(line.toString());
                 writer.newLine();
             }
         } catch (IOException e) {
