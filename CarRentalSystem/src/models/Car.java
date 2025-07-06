@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Car extends Vehicle implements Rentable{
-    private List<Rental> rentals;
+    private List<Rental<Car>> rentals;
 
     public Car(String make, String model, int year, String type) {
         super(make, model, year, type);
         this.rentals = new ArrayList<>();
     }
 
-    public List<Rental> getRentals() {
+    public List<Rental<Car>> getRentals() {
         return rentals;
     }
 
-    public void setRentals(List<Rental> rentals) {
+    public void setRentals(List<Rental<Car>> rentals) {
         this.rentals = rentals;
     }
 
@@ -31,20 +31,20 @@ public class Car extends Vehicle implements Rentable{
 
     @Override
     public boolean rent(Customer customer, LocalDate startDate, LocalDate returnDate) {
-        for (Rental rental : rentals) {
+        for (Rental<Car> rental : rentals) {
             if (rental.getReturnDate().isAfter(startDate)) {
                 System.out.println("Car is already rented.");
                 return false;
             }
         }
-        Rental newRental = new Rental(this, customer, startDate, returnDate);
+        Rental<Car> newRental = new Rental<>(this, customer, startDate, returnDate);
         rentals.add(newRental);
         return true;
     }
 
     @Override
     public boolean returnCar(Customer customer, LocalDate returnDate) {
-        for (Rental rental : rentals) {
+        for (Rental<Car> rental : rentals) {
             if (rental.isActive() && rental.getCustomer() != null &&
                     rental.getCustomer().getName().equalsIgnoreCase(customer.getName())) {
 
@@ -57,8 +57,8 @@ public class Car extends Vehicle implements Rentable{
     }
 
 
-    public Rental getActiveRental() {
-        for (Rental rental : rentals) {
+    public Rental<Car> getActiveRental() {
+        for (Rental<Car> rental : rentals) {
             if (rental.isActive()) {
                 return rental;
             }

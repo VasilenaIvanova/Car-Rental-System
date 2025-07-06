@@ -2,27 +2,27 @@ package models;
 
 import java.time.LocalDate;
 
-public class Rental {
-    private Car car;
+public class Rental<T extends Vehicle> {
+    private T vehicle;
     private Customer customer;
     private LocalDate startDate;
     private LocalDate returnDate;
     private boolean isActive;
 
-    public Rental(Car car, Customer customer, LocalDate startDate, LocalDate returnDate) {
-        this.car = car;
+    public Rental(T vehicle, Customer customer, LocalDate startDate, LocalDate returnDate) {
+        this.vehicle = vehicle;
         this.customer = customer;
         this.startDate = startDate;
         this.returnDate = returnDate;
         isActive = true;
     }
 
-    public Car getCar() {
-        return car;
+    public T getVehicle() {
+        return vehicle;
     }
 
-    public void setCar(Car car) {
-        this.car = car;
+    public void setCar(T vehicle) {
+        this.vehicle = vehicle;
     }
 
     public Customer getCustomer() {
@@ -58,7 +58,7 @@ public class Rental {
     }
 
     public void information() {
-        System.out.println("Car -> ID: " + car.getId() + " is rented to: " + customer);
+        System.out.println("Vehicle ID: " + vehicle.getId() + " is rented to: " + customer);
         System.out.println("From: " + startDate + ", To: " + returnDate);
     }
 }

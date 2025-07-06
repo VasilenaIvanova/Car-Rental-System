@@ -1,6 +1,7 @@
 Id,Make,Model,Year,Type,Status,Renter,From,To
 1,Fiat,Tipo Station Wagon,2020,Hatchback,Available
 2,Skoda,Rapid,2022,Sedan,Available
-3,Renault,Clia,2023,Sedan,Available
+3,Renault,Clia,2023,Sedan,Rented,Petur Petrov,2025-07-27,2025-08-10
 4,Tesla,XS,2023,Sports car,Available
-6,Audi,MG,2018,Sports car,Available
+5,Audi,MG,2018,Sports car,Available
+6,Ferrari,HS,2025,Sports car,Rented,Ivan Ivanov,2025-07-20,2025-07-30
